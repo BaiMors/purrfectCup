@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 
-    kotlin("plugin.serialization") version "1.9.22"
+    kotlin("plugin.serialization") version "2.0.20"
 }
 
 android {
@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation (libs.volley)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -69,11 +71,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(platform(libs.bom))
-    implementation(libs.postgrest.kt)
-    implementation(libs.gotrue.kt)
-    implementation(libs.realtime.kt)
-    implementation(libs.ktor.client.engine.z)
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.6.1"))
+    implementation(libs.supabase.postgrest.kt)
+    implementation(libs.github.gotrue.kt)
+    implementation(libs.storage.kt)
+    implementation(libs.supabase.realtime.kt)
+
+    implementation(libs.ktor.client.android)
+
 
 
 
