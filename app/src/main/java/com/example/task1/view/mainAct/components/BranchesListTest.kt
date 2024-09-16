@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,7 +31,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun BranchesListTest()
 {
-    var branches by remember { mutableStateOf<List<BranchesTest>>(listOf())  }
+    var branches by remember { mutableStateOf<List<BranchesTest>>(listOf()) }
     var bucket: ByteArray? = null
     var bytes:ByteArray? = null
     var files: List<BucketItem>? = null
@@ -39,7 +40,7 @@ fun BranchesListTest()
             branches = Constants.supabase.from("branches")
                 .select().decodeList<BranchesTest>()
             branches.forEach{it->
-                Log.d("C",it.name)
+                Log.d("B",it.name)
             }
         }
     }
