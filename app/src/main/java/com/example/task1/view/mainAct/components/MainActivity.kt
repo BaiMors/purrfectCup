@@ -19,6 +19,7 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    avt()
                     BranchesListTest()
                 }
             }

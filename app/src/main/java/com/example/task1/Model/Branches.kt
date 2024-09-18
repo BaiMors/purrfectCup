@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Branches(
-    val id: Int,
+    val id: String,
     val address: String,
     val image:String?
 )

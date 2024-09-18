@@ -1,5 +1,6 @@
 package com.example.task1.view.mainAct.components
 
+import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,11 +41,6 @@ fun BranchesListTest()
     var files: List<BucketItem>? = null*/
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-/*            branches = Constants.supabase.from("branches")
-                .select().decodeList<BranchesTest>()
-            branches.forEach{it->
-
-            }*/
             try {
                 branches = Constants.supabase.postgrest.from("Branches").
                 select().decodeList()
@@ -64,7 +60,7 @@ fun BranchesListTest()
             key = { branch -> branch.id }
         )
         {
-                branch ->
+            branch ->
             val imageState = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(LocalContext.current).data(branch.image)
                     .size(Size.ORIGINAL).build()
@@ -95,27 +91,4 @@ fun BranchesListTest()
             )
         }
     }
-
-  /*  LazyColumn {
-        items(
-            branches,
-            key = { branch -> branch.id},
-        ) {
-            branch ->
-            val imageState = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(LocalContext.current).data(branch.image)
-                    .size(Size.ORIGINAL).build()
-            ).state
-            if (imageState is AsyncImagePainter.State.Error) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-        }
-    }*/
 }
