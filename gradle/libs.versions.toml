@@ -1,6 +1,7 @@
 [versions]
-agp = "8.6.0"
+agp = "8.5.1"
 bom = "2.6.2"
+bomVersion = "2.6.1"
 coilCompose = "2.4.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -19,6 +20,7 @@ volley = "1.2.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
+bom-v261 = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bomVersion" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 github-gotrue-kt = { module = "io.github.jan-tennert.supabase:gotrue-kt" }
 gotrue-kt = { module = "io.github.jan-tennert.supabase:gotrue-kt" }

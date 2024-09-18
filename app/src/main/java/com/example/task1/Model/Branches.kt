@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class BranchesTest(
+data class Branches(
     val id: Int,
-    val name: String,
+    val address: String,
     val image:String?
 )
 

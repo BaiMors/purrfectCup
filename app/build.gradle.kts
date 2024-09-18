@@ -71,7 +71,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(platform("io.github.jan-tennert.supabase:bom:2.6.1"))
+    implementation(platform(libs.bom.v261))
     implementation(libs.supabase.postgrest.kt)
     implementation(libs.github.gotrue.kt)
     implementation(libs.storage.kt)
