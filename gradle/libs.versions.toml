@@ -16,6 +16,7 @@ composeBom = "2024.09.00"
 postgrestKt = "2.6.1"
 storageKt = "2.6.1"
 volley = "1.2.1"
+navigationCompose = "2.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,7 @@ storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref
 supabase-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "postgrestKt" }
 supabase-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

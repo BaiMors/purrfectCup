@@ -19,20 +19,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.task1.Model.Branches
 import com.example.task1.domain.Constants
-import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun BranchesListTest()
+fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
 {
     var branches by remember { mutableStateOf<List<Branches>>(listOf()) }
 /*    var bucket: ByteArray? = null
@@ -46,8 +46,7 @@ fun BranchesListTest()
 
             }*/
             try {
-                branches = Constants.supabase.postgrest.from("Branches").
-                select().decodeList()
+                branches = Constants.supabase.from("Branches").select().decodeList()
                 branches.forEach{it->
                     println(it.address)
                 }
