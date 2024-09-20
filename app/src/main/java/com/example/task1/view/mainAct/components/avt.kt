@@ -1,5 +1,6 @@
 package com.example.task1.view.mainAct.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -44,6 +47,10 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
     val viewModel = MainViewModel()
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val authResult by viewModel.authResult.collectAsState()
+    val regResult by viewModel.regResult.collectAsState()
+    val ctx = LocalContext.current
+
     Column(
         Modifier
 
@@ -124,6 +131,32 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
             viewModel.onSignUpEmail(email.value,password.value)
         }){
             Text("Зарегистрироваться", fontSize = 25.sp)
+        }
+
+        // Обработка результата авторизации
+        when (authResult) {
+            is MainViewModel.AuthResult.Success -> {
+                // Если авторизация успешна, навигация на другой экран
+                navHost.navigate("BranchesListTest")
+            }
+            is MainViewModel.AuthResult.Error -> {
+                // Если произошла ошибка, показываем сообщение об ошибке
+                Toast.makeText(ctx, "Error: ${(authResult as MainViewModel.AuthResult.Error).message}", Toast.LENGTH_SHORT).show()
+            }
+            null -> {
+                // Ожидание результата, ничего не делаем
+            }
+        }
+
+        when (regResult) {
+            is MainViewModel.AuthResult.Success -> {
+                navHost.navigate("BranchesListTest")
+            }
+            is MainViewModel.AuthResult.Error -> {
+                Toast.makeText(ctx, "Error: ${(authResult as MainViewModel.AuthResult.Error).message}", Toast.LENGTH_SHORT).show()
+            }
+            null -> {
+            }
         }
     }
 }
