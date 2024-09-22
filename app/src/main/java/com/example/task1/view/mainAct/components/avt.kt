@@ -48,7 +48,7 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val authResult by viewModel.authResult.collectAsState()
-    val regResult by viewModel.regResult.collectAsState()
+    //val regResult by viewModel.regResult.collectAsState()
     val ctx = LocalContext.current
 
     Column(
@@ -56,7 +56,7 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
 
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color(0xFFfaedcd)),
+            .background(Color(0xFFd4a373)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
 
@@ -69,12 +69,14 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
                 textStyle = TextStyle(fontSize = 15.sp),
                 onValueChange = { newText -> email.value = newText },
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.border(2.dp, Color(0xFFd4a373), shape = RoundedCornerShape(10.dp)),
+                modifier = Modifier.border(2.dp, Color(0xFFfefae0), shape = RoundedCornerShape(10.dp)),
                 colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFFfefae0),
-                    focusedContainerColor = Color(0xFFfefae0),
+                    unfocusedContainerColor = Color(0xFFd4a373),
+                    focusedContainerColor = Color(0xFFd4a373),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = Color(0xFFfefae0),
+                    unfocusedTextColor = Color(0xFFfefae0)
                 )
             )
 
@@ -83,12 +85,14 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
         var passwordVisibility: Boolean by remember { mutableStateOf(false) }
         TextField(
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.border(2.dp, Color(0xFFd4a373), shape = RoundedCornerShape(10.dp)),
+            modifier = Modifier.border(2.dp, Color(0xFFfefae0), shape = RoundedCornerShape(10.dp)),
             colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFfefae0),
-                focusedContainerColor = Color(0xFFfefae0),
+                unfocusedContainerColor = Color(0xFFd4a373),
+                focusedContainerColor = Color(0xFFd4a373),
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = Color(0xFFfefae0),
+                unfocusedTextColor = Color(0xFFfefae0)
             ),
             value = password.value,
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
@@ -115,29 +119,29 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+                .padding(top = 20.dp, start = 40.dp, end = 40.dp, bottom = 20.dp),
+            colors = ButtonDefaults.buttonColors(Color(0xFFfefae0)),
             onClick = {
             viewModel.onSignInEmailPassword(email.value,password.value)
         }){
-            Text("Войти", fontSize = 25.sp)
+            Text("Войти", fontSize = 20.sp, color = Color(0xFF000000))
         }
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+                .padding(top = 0.dp, start = 40.dp, end = 40.dp, bottom = 20.dp),
+            colors = ButtonDefaults.buttonColors(Color(0xFFfefae0)),
             onClick = {
             viewModel.onSignUpEmail(email.value,password.value)
         }){
-            Text("Зарегистрироваться", fontSize = 25.sp)
+            Text("Зарегистрироваться", fontSize = 20.sp, color = Color(0xFF000000))
         }
 
         // Обработка результата авторизации
         when (authResult) {
             is MainViewModel.AuthResult.Success -> {
                 // Если авторизация успешна, навигация на другой экран
-                navHost.navigate("BranchesListTest")
+                navHost.navigate("BranchesList")
             }
             is MainViewModel.AuthResult.Error -> {
                 // Если произошла ошибка, показываем сообщение об ошибке
@@ -148,7 +152,7 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
             }
         }
 
-        when (regResult) {
+            /*when (regResult) {
             is MainViewModel.AuthResult.Success -> {
                 navHost.navigate("BranchesListTest")
             }
@@ -157,6 +161,13 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
             }
             null -> {
             }
-        }
+        }*/
     }
+
+
+}
+
+@Override
+public fun onBackPressed(){
+
 }

@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.task1.view.mainAct.components.BranchesList
 import com.example.task1.view.mainAct.components.MainViewModel
+import com.example.task1.view.mainAct.components.UserProfile
 import com.example.task1.view.mainAct.components.avt
 
 /*Класс для перемещения по страницам*/
@@ -20,6 +21,9 @@ fun Navigation(viewModel: MainViewModel) {
         }
         composable("BranchesList"){
             BranchesList(navController, viewModel)
+        }
+        composable("UserProfile"){
+            UserProfile(navController, viewModel)
         }
     }
 }
