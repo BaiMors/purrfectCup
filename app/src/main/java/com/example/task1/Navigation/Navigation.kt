@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.task1.view.mainAct.components.BranchesList
 import com.example.task1.view.mainAct.components.MainViewModel
+import com.example.task1.view.mainAct.components.Pets
 import com.example.task1.view.mainAct.components.UserProfile
 import com.example.task1.view.mainAct.components.avt
 
@@ -25,5 +26,8 @@ fun Navigation(viewModel: MainViewModel) {
         composable("UserProfile"){
             UserProfile(navController, viewModel)
         }
+/*        composable("Pets"){
+            Pets(navController, viewModel)
+        }*/
     }
 }

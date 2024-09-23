@@ -3,8 +3,10 @@ package com.example.task1.Model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Clients(
-    val client_id: String,
+data class Pets(
+    val id: String,
     val name: String,
-    val surname:String,
+    val description:String,
+    val image:String?,
+    val branch:String
 )

@@ -3,6 +3,7 @@ package com.example.task1.view.mainAct.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -50,6 +57,7 @@ import kotlinx.coroutines.withContext
 fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
 {
     var branches by remember { mutableStateOf<List<Branches>>(listOf()) }
+    val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -65,11 +73,26 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
         }
     }
 
+/*    NavHost(navController, startDestination = navController.currentDestination!!) {
+        //composable(UserRoutes.Users.route) { Users(employees, navController) }
+        composable("Pets",
+            arguments = listOf(navArgument("branch") { type = NavType.IntType })) {
+                stackEntry ->
+            val selectedBranch = stackEntry.arguments?.getString("branch")
+            Pets(selectedBranch!!)
+        }
+    }*/
+
     Column(
-        modifier = Modifier.fillMaxSize().background(Color(0xFFfefae0))
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFfefae0))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFFd4a373))
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .background(Color(0xFFd4a373))
         ) {
             Text(
                 "Наши филиалы",
@@ -83,14 +106,17 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
             ){
                 Button(
                     onClick = { navHost.navigate("UserProfile") },
-                    modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.CenterEnd),
                     colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
 
                     ) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_person_24),
                         contentDescription = "",
-                        modifier = Modifier.background(Color(0xFFd4a373))
+                        modifier = Modifier
+                            .background(Color(0xFFd4a373))
                             .padding(top = 35.dp)
                     )
                 }
@@ -109,9 +135,13 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
                         .size(Size.ORIGINAL).build()
                 ).state
                 Box(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .border(1.dp, Color(0xFFd4a373))
                         .padding(5.dp)
+                        .clickable {
+                            navHost.navigate("Pets/${branch.id}")
+                        }
                 ){
                     if (imageState is AsyncImagePainter.State.Error) {
                         Box(
@@ -135,19 +165,23 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp).background(Color.Black.copy(alpha = 0.5f)),
+                                .height(200.dp)
+                                .background(Color.Black.copy(alpha = 0.5f)),
                         )
                     }
                     Text(
                         branch.address,
-                        modifier = Modifier.padding(8.dp).align(Alignment.BottomStart),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .align(Alignment.BottomStart),
                         color = Color(0xFFfefae0),
                         fontSize = 20.sp
                     )
                     Icon(
-                        painter = painterResource(R.drawable.baseline_person_24),
+                        painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
                         contentDescription = "",
-                        modifier = Modifier.align(Alignment.BottomEnd)
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
                             .padding(bottom = 8.dp, end = 20.dp)
                     )
                 }

@@ -75,11 +75,13 @@ class MainViewModel:ViewModel() {
         println("enter upd")
         viewModelScope.launch {
             try {
-                Constants.supabase.from("Clients").update(
-                    {
+                val toUpsert = Clients(client_id = Constants.supabase.auth.currentUserOrNull()!!.id, name = newName, surname = newSurname)
+                Constants.supabase.from("Clients").upsert(
+/*                    {
                         set("name", newName)
                         set("surname", newSurname)
-                    }
+                    }*/
+                    toUpsert
                 ) {
                     filter {
                         eq("client_id", Constants.supabase.auth)

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -96,23 +97,24 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
                 .background(Color(0xFFd4a373))
         ) {
             Icon(
-                painter = painterResource(R.drawable.baseline_person_24),
+                painter = painterResource(R.drawable.baseline_keyboard_arrow_left_24),
                 contentDescription = "",
                 modifier = Modifier
                     .background(Color(0xFFd4a373))
                     .padding(top = 35.dp, start = 20.dp)
-                    .align(Alignment.CenterStart).clickable { navHost.popBackStack() }
+                    .align(Alignment.CenterStart)
+                    .clickable { navHost.popBackStack() }
             )
         }
 
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_foreground),
+        /*Icon(
+            painter = painterResource(Icons.Default.Face.hashCode()),
             contentDescription = "",
             modifier = Modifier
                 .padding(top = 35.dp)
                 .align(Alignment.CenterHorizontally),
-            contentScale = ContentScale.Crop
-        )
+            //contentScale = ContentScale.Crop
+        )*/
 
         Box(
             modifier = Modifier
@@ -219,7 +221,8 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 50.dp, start = 50.dp, end = 50.dp).align(Alignment.CenterHorizontally),
+                .padding(top = 50.dp, start = 50.dp, end = 50.dp)
+                .align(Alignment.CenterHorizontally),
             colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
             shape = RoundedCornerShape(sh.dp),
             onClick = {
