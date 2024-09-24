@@ -8,7 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.task1.view.mainAct.components.BranchesList
 import com.example.task1.view.mainAct.components.Introduction
-import com.example.task1.view.mainAct.components.ItemDetails
 import com.example.task1.view.mainAct.components.MainViewModel
 import com.example.task1.view.mainAct.components.Pets
 import com.example.task1.view.mainAct.components.UserProfile
@@ -39,10 +38,6 @@ fun Navigation(viewModel: MainViewModel) {
         }
         composable("Pets"){
             Pets(navController, viewModel)
-        }
-        composable("details/{itemId}",
-            arguments = listOf(navArgument("itemId") { type = NavType.StringType })) { backStackEntry ->
-            ItemDetails(itemId = backStackEntry.arguments?.getString("itemId") ?: "")
         }
     }
 }

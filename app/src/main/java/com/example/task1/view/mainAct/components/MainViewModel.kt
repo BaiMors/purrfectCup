@@ -86,7 +86,7 @@ class MainViewModel:ViewModel() {
                     }
                 }
                 Constants.supabase.auth.updateUser {
-                    password = newPassword
+                    //password = newPassword
                     email = newEmail
                 }
                 println("Success updating")

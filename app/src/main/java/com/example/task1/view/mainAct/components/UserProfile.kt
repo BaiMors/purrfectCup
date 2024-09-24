@@ -66,16 +66,16 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
     var ids by remember { mutableStateOf<List<Clients>>(listOf()) }
     val name = remember { mutableStateOf("") }
     var surname = remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    var email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val sh = 17
-    val upsertResult by viewModel.regResult.collectAsState()
+    val upsertResult by viewModel.upsertResult.collectAsState()
     val ctx = LocalContext.current
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             try {
-                email = Constants.supabase.auth.currentUserOrNull()?.email.toString()
+//                email = Constants.supabase.auth.currentUserOrNull()?.email.toString()
                 ids = Constants.supabase.from("Clients").select {
                     filter {
                         eq("client_id", Constants.supabase.auth.currentUserOrNull()!!.id)
@@ -179,10 +179,10 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
         )
         {
             TextField(
-                value = email,
+                value = email.value,
                 label = { Text("Электронная почта") },
                 textStyle = TextStyle(fontSize = 15.sp),
-                onValueChange = { newText -> email = newText },
+                onValueChange = { newText -> email.value = newText },
                 shape = RoundedCornerShape(sh.dp),
                 modifier = Modifier
                     .border(2.dp, Color(0xFFd4a373), shape = RoundedCornerShape(sh.dp))
@@ -223,14 +223,12 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
             )
         }
 
-        // Обработка результата авторизации
         when (upsertResult) {
             is MainViewModel.Result.Success -> {
-                // Если авторизация успешна, навигация на другой экран
                 navHost.navigate("UserProfileMain")
+                Toast.makeText(ctx, "Данные успешно обновлены", Toast.LENGTH_SHORT).show()
             }
             is MainViewModel.Result.Error -> {
-                // Если произошла ошибка, показываем сообщение об ошибке
                 Toast.makeText(ctx, "Error: ${(upsertResult as MainViewModel.Result.Error).message}", Toast.LENGTH_SHORT).show()
             }
             null -> {
@@ -246,10 +244,11 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
             colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
             shape = RoundedCornerShape(sh.dp),
             onClick = {
-                viewModel.updateUserProfile(name.value, surname.value, email, password.value)
-
+                viewModel.updateUserProfile(name.value, surname.value, email.value, password.value)
+                navHost.navigate("UserProfileMain")
+                Toast.makeText(ctx, "Данные успешно обновлены", Toast.LENGTH_SHORT).show()
             }){
-            Text("Сохранить изменения", fontSize = 17.sp)
+            Text("Сохранить изменения", fontSize = 17.sp, color = Color(0xFFfefae0))
         }
     }
 }

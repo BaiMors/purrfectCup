@@ -14,26 +14,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHost
@@ -53,6 +60,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun Pets(navHost: NavHostController, viewModel: MainViewModel){
     var pets by remember { mutableStateOf<List<Pets>>(listOf()) }
+    val uriHandler = LocalUriHandler.current
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -78,10 +86,27 @@ fun Pets(navHost: NavHostController, viewModel: MainViewModel){
             .fillMaxSize()
             .background(Color(0xFFfefae0))
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .background(Color(0xFFd4a373))
+        ) {
+            Text(
+                "Наши сотрудники",
+                modifier = Modifier.padding(top = 50.dp, start = 10.dp),
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFfefae0)
+            )
+        }
+
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.padding(bottom = 60.dp)
+            ) {
                 items(
                     pets,
                     key = { pet -> pet.id }
@@ -91,13 +116,13 @@ fun Pets(navHost: NavHostController, viewModel: MainViewModel){
                         model = ImageRequest.Builder(LocalContext.current).data(pet.image)
                             .size(Size.ORIGINAL).build()
                     ).state
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(1.dp, Color(0xFFd4a373))
+                            .border(2.dp, Color(0xFFd4a373), RoundedCornerShape(13.dp))
                             .padding(5.dp)
                             .clickable {
-                                navHost.navigate("details/$pet")
+                                uriHandler.openUri("https://tenor.com/ru/view/%D0%BA%D0%BE%D1%82%D0%B8%D0%BA-%D0%BA%D0%BE%D1%82%D1%8B-%D0%BA%D0%BE%D1%82-%D0%BA%D0%BE%D1%88%D0%BA%D0%B0-%D0%BA%D0%BE%D1%82%D0%B5%D0%BD%D0%BE%D0%BA-gif-22632328")
                             }
                     ){
                         if (imageState is AsyncImagePainter.State.Error) {
@@ -114,26 +139,36 @@ fun Pets(navHost: NavHostController, viewModel: MainViewModel){
                             Image(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(200.dp),
+                                    .clip(RoundedCornerShape(13.dp))
+                                    .height(200.dp)
+                                    .clickable {
+
+                                    },
                                 painter = imageState.painter,
                                 contentDescription = "",
                                 contentScale = ContentScale.Crop,
                             )
-                            Box(
+                        }
+                        Column {
+                            Text(
+                                pet.name,
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp)
-                                    .background(Color.Black.copy(alpha = 0.5f)),
+                                    .padding(8.dp)
+                                    .align(Alignment.Start),
+                                color = Color(0xFFd4a373),
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                pet.description,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .align(Alignment.Start),
+                                color = Color(0xFFd4a373),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
                             )
                         }
-                        Text(
-                            pet.name,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .align(Alignment.BottomStart),
-                            color = Color(0xFFfefae0),
-                            fontSize = 20.sp
-                        )
                     }
                 }
             }
@@ -217,13 +252,4 @@ fun Pets(navHost: NavHostController, viewModel: MainViewModel){
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ItemDetails(itemId: String) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Item Details") }) },
-        content = { PaddingValues ->
-            Text(text = "Details for $itemId", modifier = Modifier.padding(PaddingValues))
-        }
-    )
-}
+
