@@ -7,4 +7,5 @@ data class Clients(
     val client_id: String,
     val name: String,
     val surname:String,
+    val role:String
 )

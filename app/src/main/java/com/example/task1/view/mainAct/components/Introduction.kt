@@ -1,6 +1,7 @@
 package com.example.task1.view.mainAct.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,10 +56,6 @@ import kotlinx.coroutines.withContext
 @Composable
 fun Introduction(navHost: NavHostController, viewModel: MainViewModel) {
     var photos by remember { mutableStateOf<List<Carousel>>(listOf()) }
-    val listPhotos = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-    var images by remember { mutableStateOf(photos) }
-    //val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -76,12 +75,13 @@ fun Introduction(navHost: NavHostController, viewModel: MainViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFfefae0))
+            .verticalScroll(ScrollState(0))
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                "Добро пожаловать в",
+                "Это —",
                 fontSize = 30.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -100,17 +100,47 @@ fun Introduction(navHost: NavHostController, viewModel: MainViewModel) {
             )
         }
 
-        LaunchedEffect(listPhotos) {
-            if (listPhotos.firstVisibleItemIndex > photos.size - 1) { //Загрузка новых изображений, когда пользователь приближается к концу
-                coroutineScope.launch {
-                    val newImages = photos
-                    images += newImages //Добавляем новые изображения к существующему списку
-                }
+        Icon(
+            painter = painterResource(R.drawable.free_icon_paw_3659404),
+            contentDescription = "",
+            tint = Color(0xFFd4a373),
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .width(312.dp)
+                .height(312.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .padding(bottom = 0.dp)
+        ) {
+            Text(
+                "Галерея работников месяца",
+                fontWeight = FontWeight.Bold,
+                fontSize = 19.sp,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically),
+                color = Color(0xFFd4a373)
+            )
+            Box(
+                modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_right_24),
+                    contentDescription = "",
+                    tint = Color(0xFFd4a373),
+                    modifier = Modifier.align(Alignment.CenterEnd).height(39.dp).width(39.dp)
+                )
             }
         }
 
-
-        LazyRow {
+        LazyRow(
+            modifier = Modifier.padding(bottom = 50.dp)
+        ) {
             items(photos) { photo ->
                 val imageState = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current).data(photo.image)
@@ -137,7 +167,8 @@ fun Introduction(navHost: NavHostController, viewModel: MainViewModel) {
                         Image(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .width(300.dp),
+                                //.width(300.dp),
+                                .fillParentMaxWidth(),
                             painter = imageState.painter,
                             contentDescription = "",
                             contentScale = ContentScale.Crop,
@@ -145,6 +176,33 @@ fun Introduction(navHost: NavHostController, viewModel: MainViewModel) {
                     }
                 }
             }
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(90.dp)
+            .padding(bottom = 0.dp)
+    ){
+        Text(
+            "Скидка недели",
+            fontWeight = FontWeight.Bold,
+            fontSize = 19.sp,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .align(Alignment.CenterVertically),
+            color = Color(0xFFd4a373)
+        )
+        Box(
+            modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.baseline_arrow_right_24),
+                contentDescription = "",
+                tint = Color(0xFFd4a373),
+                modifier = Modifier.align(Alignment.CenterEnd).height(39.dp).width(39.dp)
+            )
         }
     }
 

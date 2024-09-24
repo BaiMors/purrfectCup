@@ -89,10 +89,26 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
             .fillMaxSize()
             .background(Color(0xFFfefae0))
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .background(Color(0xFFd4a373))
+        ) {
+            Text(
+                "Наши филиалы",
+                modifier = Modifier.padding(top = 50.dp, start = 10.dp),
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFfefae0)
+            )
+        }
         Box(
             modifier = Modifier.fillMaxSize()
         ){
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.padding(bottom = 50.dp)
+            ) {
                 items(
                     branches,
                     key = { branch -> branch.id }

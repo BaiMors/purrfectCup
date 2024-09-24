@@ -131,14 +131,6 @@ fun Pets(navHost: NavHostController, viewModel: MainViewModel){
                             color = Color(0xFFfefae0),
                             fontSize = 20.sp
                         )
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
-                            contentDescription = "",
-                            tint = Color(0xFFfefae0),
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(bottom = 8.dp, end = 20.dp)
-                        )
                     }
                 }
             }
