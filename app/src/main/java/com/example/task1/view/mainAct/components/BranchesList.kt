@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -59,6 +60,7 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
 {
     var branches by remember { mutableStateOf<List<Branches>>(listOf()) }
     val navController = rememberNavController()
+    val uriHandler = LocalUriHandler.current
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -125,7 +127,7 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
                             .border(1.dp, Color(0xFFd4a373))
                             .padding(5.dp)
                             .clickable {
-                                //navHost.navigate("Pets/${branch.id}")
+                                uriHandler.openUri("https://www.google.com/maps/place/" + branch.address)
                             }
                     ){
                         if (imageState is AsyncImagePainter.State.Error) {
@@ -151,7 +153,7 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(200.dp)
-                                    .background(Color.Black.copy(alpha = 0.5f)),
+                                    .background(Color.Black.copy(alpha = 0.5f))
                             )
                         }
                         Text(
@@ -160,7 +162,7 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
                                 .padding(8.dp)
                                 .align(Alignment.BottomStart),
                             color = Color(0xFFfefae0),
-                            fontSize = 20.sp
+                            fontSize = 19.sp
                         )
                         Icon(
                             painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),

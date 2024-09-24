@@ -17,8 +17,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -94,7 +97,7 @@ fun Pets(navHost: NavHostController, viewModel: MainViewModel){
                             .border(1.dp, Color(0xFFd4a373))
                             .padding(5.dp)
                             .clickable {
-                                //navHost.navigate("Pets/${branch.id}")
+                                navHost.navigate("details/$pet")
                             }
                     ){
                         if (imageState is AsyncImagePainter.State.Error) {
@@ -212,4 +215,15 @@ fun Pets(navHost: NavHostController, viewModel: MainViewModel){
 
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ItemDetails(itemId: String) {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Item Details") }) },
+        content = { PaddingValues ->
+            Text(text = "Details for $itemId", modifier = Modifier.padding(PaddingValues))
+        }
+    )
 }

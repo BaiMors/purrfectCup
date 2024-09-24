@@ -77,7 +77,7 @@ class MainViewModel:ViewModel() {
         println("enter upd")
         viewModelScope.launch {
             try {
-                val toUpsert = Clients(client_id = Constants.supabase.auth.currentUserOrNull()!!.id, name = newName, surname = newSurname)
+                val toUpsert = Clients(client_id = Constants.supabase.auth.currentUserOrNull()!!.id, name = newName, surname = newSurname, role = null)
                 Constants.supabase.from("Clients").upsert(
                     toUpsert
                 ) {
