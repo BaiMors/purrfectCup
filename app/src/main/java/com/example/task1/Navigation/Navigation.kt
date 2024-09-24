@@ -5,9 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.task1.view.mainAct.components.BranchesList
+import com.example.task1.view.mainAct.components.Introduction
 import com.example.task1.view.mainAct.components.MainViewModel
 import com.example.task1.view.mainAct.components.Pets
 import com.example.task1.view.mainAct.components.UserProfile
+import com.example.task1.view.mainAct.components.UserProfileMain
 import com.example.task1.view.mainAct.components.avt
 
 /*Класс для перемещения по страницам*/
@@ -20,14 +22,20 @@ fun Navigation(viewModel: MainViewModel) {
         composable("avt"){
             avt(navController, viewModel)
         }
+        composable("Introduction"){
+            Introduction(navController, viewModel)
+        }
         composable("BranchesList"){
             BranchesList(navController, viewModel)
         }
         composable("UserProfile"){
             UserProfile(navController, viewModel)
         }
-/*        composable("Pets"){
+        composable("UserProfileMain"){
+            UserProfileMain(navController, viewModel)
+        }
+        composable("Pets"){
             Pets(navController, viewModel)
-        }*/
+        }
     }
 }

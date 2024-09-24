@@ -4,13 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,12 +30,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
-import androidx.navigation.Navigator
 import com.example.task1.R
 
 
@@ -48,7 +42,7 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val authResult by viewModel.authResult.collectAsState()
-    //val regResult by viewModel.regResult.collectAsState()
+    val regResult by viewModel.regResult.collectAsState()
     val ctx = LocalContext.current
 
     Column(
@@ -139,29 +133,29 @@ fun avt(navHost: NavHostController, viewModel: MainViewModel) {
 
         // Обработка результата авторизации
         when (authResult) {
-            is MainViewModel.AuthResult.Success -> {
+            is MainViewModel.Result.Success -> {
                 // Если авторизация успешна, навигация на другой экран
-                navHost.navigate("BranchesList")
+                navHost.navigate("Introduction")
             }
-            is MainViewModel.AuthResult.Error -> {
+            is MainViewModel.Result.Error -> {
                 // Если произошла ошибка, показываем сообщение об ошибке
-                Toast.makeText(ctx, "Error: ${(authResult as MainViewModel.AuthResult.Error).message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(ctx, "Error: ${(authResult as MainViewModel.Result.Error).message}", Toast.LENGTH_SHORT).show()
             }
             null -> {
                 // Ожидание результата, ничего не делаем
             }
         }
 
-            /*when (regResult) {
-            is MainViewModel.AuthResult.Success -> {
-                navHost.navigate("BranchesListTest")
+            when (regResult) {
+            is MainViewModel.Result.Success -> {
+                Toast.makeText(ctx, "Регистрация успешна. Подтвердите почту и войдите", Toast.LENGTH_SHORT).show()
             }
-            is MainViewModel.AuthResult.Error -> {
-                Toast.makeText(ctx, "Error: ${(authResult as MainViewModel.AuthResult.Error).message}", Toast.LENGTH_SHORT).show()
+            is MainViewModel.Result.Error -> {
+                Toast.makeText(ctx, "Error: ${(regResult as MainViewModel.Result.Error).message}", Toast.LENGTH_SHORT).show()
             }
             null -> {
             }
-        }*/
+        }
     }
 
 

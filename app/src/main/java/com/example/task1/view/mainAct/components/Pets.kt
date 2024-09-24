@@ -6,12 +6,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -29,6 +33,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -42,7 +48,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun Pets(selectedBranch: String){
+fun Pets(navHost: NavHostController, viewModel: MainViewModel){
     var pets by remember { mutableStateOf<List<Pets>>(listOf()) }
 
     LaunchedEffect(Unit) {
@@ -50,7 +56,7 @@ fun Pets(selectedBranch: String){
             try {
                 pets = Constants.supabase.from("Pets").select {
                     filter {
-                        eq("branch", selectedBranch)
+                        //eq("branch", selectedBranch)
                     }
                 }.decodeList()
                 pets.forEach{it->
@@ -70,82 +76,148 @@ fun Pets(selectedBranch: String){
             .background(Color(0xFFfefae0))
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(90.dp)
-                .background(Color(0xFFd4a373))
+            modifier = Modifier.fillMaxSize()
         ) {
-            Icon(
-                painter = painterResource(R.drawable.baseline_keyboard_arrow_left_24),
-                contentDescription = "",
-                modifier = Modifier
-                    .background(Color(0xFFd4a373))
-                    .padding(top = 35.dp, start = 20.dp)
-                    .align(Alignment.CenterStart)
-                    .clickable {  }
-            )
-        }
-
-        LazyColumn {
-            items(
-                pets,
-                key = { pet -> pet.id }
-            )
-            {
-                    pet ->
-                val imageState = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current).data(pet.image)
-                        .size(Size.ORIGINAL).build()
-                ).state
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, Color(0xFFd4a373))
-                        .padding(5.dp)
+            LazyColumn {
+                items(
+                    pets,
+                    key = { pet -> pet.id }
                 ){
-                    if (imageState is AsyncImagePainter.State.Error) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
+                        pet ->
+                    val imageState = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current).data(pet.image)
+                            .size(Size.ORIGINAL).build()
+                    ).state
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, Color(0xFFd4a373))
+                            .padding(5.dp)
+                            .clickable {
+                                //navHost.navigate("Pets/${branch.id}")
+                            }
+                    ){
+                        if (imageState is AsyncImagePainter.State.Error) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
-                    }
-                    if (imageState is AsyncImagePainter.State.Success) {
-                        Image(
+                        if (imageState is AsyncImagePainter.State.Success) {
+                            Image(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp),
+                                painter = imageState.painter,
+                                contentDescription = "",
+                                contentScale = ContentScale.Crop,
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                                    .background(Color.Black.copy(alpha = 0.5f)),
+                            )
+                        }
+                        Text(
+                            pet.name,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            painter = imageState.painter,
+                                .padding(8.dp)
+                                .align(Alignment.BottomStart),
+                            color = Color(0xFFfefae0),
+                            fontSize = 20.sp
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
                             contentDescription = "",
-                            contentScale = ContentScale.Crop,
-                        )
-                        Box(
+                            tint = Color(0xFFfefae0),
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .background(Color.Black.copy(alpha = 0.5f)),
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 8.dp, end = 20.dp)
                         )
                     }
-                    Text(
-                        pet.name,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .align(Alignment.BottomStart),
-                        color = Color(0xFFfefae0),
-                        fontSize = 20.sp
-                    )
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(bottom = 8.dp, end = 20.dp)
-                    )
                 }
             }
+
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(Color(0xFFd4a373))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(start = 20.dp, end = 10.dp)
+                ) {
+                    Button(
+                        onClick = { navHost.navigate("Introduction") },
+                        modifier = Modifier
+                            .width(70.dp),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_auto_awesome_24),
+                            contentDescription = "",
+                            tint = Color(0xFFfefae0),
+                        )
+                    }
+                    Button(
+                        onClick = { navHost.navigate("BranchesList") },
+                        modifier = Modifier
+                            .width(70.dp)
+                            .align(Alignment.CenterEnd),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_yard_24),
+                            contentDescription = "",
+                            tint = Color(0xFFfefae0),
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(end = 20.dp, start = 10.dp)
+                ) {
+                    Button(
+                        onClick = { navHost.navigate("Pets") },
+                        modifier = Modifier
+                            .width(70.dp)
+                            .background(Color(0xFFfefae0)),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFfefae0)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_keyboard_double_arrow_right_24),
+                            contentDescription = "",
+                            tint = Color(0xFFd4a373),
+                        )
+                    }
+                    Button(
+                        onClick = { navHost.navigate("UserProfileMain") },
+                        modifier = Modifier
+                            .width(70.dp)
+                            .align(Alignment.CenterEnd),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_person_24),
+                            contentDescription = "",
+                            tint = Color(0xFFfefae0),
+                        )
+                    }
+                }
+            }
+
         }
     }
 }

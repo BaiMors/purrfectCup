@@ -10,21 +10,23 @@ import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.contracts.contract
 
 class MainViewModel:ViewModel() {
     // Класс для хранения результата авторизации
-    sealed class AuthResult {
-        data class Success(val user: Any) : AuthResult()  // Успех
-        data class Error(val message: String) : AuthResult()  // Ошибка
+    sealed class Result {
+        data class Success(val user: Any) : Result()  // Успех
+        data class Error(val message: String) : Result()  // Ошибка
     }
 
     // Состояние для результата авторизации
-    private val _authResult = MutableStateFlow<AuthResult?>(null)
-    val authResult: StateFlow<AuthResult?> = _authResult
+    private val _authResult = MutableStateFlow<Result?>(null)
+    val authResult: StateFlow<Result?> = _authResult
 
-/*    private val _regResult = MutableStateFlow<AuthResult?>(null)
-    val regResult: StateFlow<AuthResult?> = _regResult*/
+    private val _regResult = MutableStateFlow<Result?>(null)
+    val regResult: StateFlow<Result?> = _regResult
+
+    private val _upsertResult = MutableStateFlow<Result?>(null)
+    val upsertResult: StateFlow<Result?> = _upsertResult
 
 /*    private val _email = MutableStateFlow("")
     val email: Flow<String> = _email
@@ -37,18 +39,18 @@ class MainViewModel:ViewModel() {
         _password.value = password
     }*/
 
-    fun addUserProfile(
+    /*fun addUserProfile(
         newName: String,
         newSurname: String,
     ){
         viewModelScope.launch {
-/*            try {
+           try {
                 val user = Clients(client_id = Constants.supabase.auth.currentUserOrNull()!!.id, name = newName, surname = newSurname)
                 Constants.supabase.from("Clients").insert(user)
             }
             catch (e: Exception){
                 println(e.message.toString())
-            }*/
+            }
             try {
                 val currentUser = Constants.supabase.auth.currentUserOrNull()
 
@@ -64,7 +66,7 @@ class MainViewModel:ViewModel() {
                 println(e.message.toString())
             }
         }
-    }
+    }*/
 
     fun updateUserProfile(
         newName: String,
@@ -77,10 +79,6 @@ class MainViewModel:ViewModel() {
             try {
                 val toUpsert = Clients(client_id = Constants.supabase.auth.currentUserOrNull()!!.id, name = newName, surname = newSurname)
                 Constants.supabase.from("Clients").upsert(
-/*                    {
-                        set("name", newName)
-                        set("surname", newSurname)
-                    }*/
                     toUpsert
                 ) {
                     filter {
@@ -121,11 +119,11 @@ class MainViewModel:ViewModel() {
                 println(user.toString())
                 println(Constants.supabase.auth.currentUserOrNull()!!.id)
                 println("Success authorization")
-                _authResult.value = AuthResult.Success(user)
+                _authResult.value = Result.Success(user)
             } catch (e: Exception) {
                 println("Error")
                 println(e.message.toString())
-                _authResult.value = AuthResult.Error(e.message.toString())  // Ошибка входа
+                _authResult.value = Result.Error(e.message.toString())  // Ошибка входа
             }
         }
     }
@@ -139,12 +137,12 @@ class MainViewModel:ViewModel() {
                 println(user.toString())
                 println(Constants.supabase.auth.currentUserOrNull()!!.id)
                 println("Success registration")
-                //_regResult.value = AuthResult.Success(user = user!!)
+                _regResult.value = Result.Success(user = user!!)
             }
             catch (e: Exception) {
                 println("Error")
                 println(e.message.toString())
-                //_regResult.value = AuthResult.Error(e.message.toString())
+                _regResult.value = Result.Error(e.message.toString())
             }
 
         }

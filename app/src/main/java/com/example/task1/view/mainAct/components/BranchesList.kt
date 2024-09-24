@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -88,104 +89,146 @@ fun BranchesList(navHost: NavHostController, viewModel: MainViewModel)
             .fillMaxSize()
             .background(Color(0xFFfefae0))
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(90.dp)
-                .background(Color(0xFFd4a373))
-        ) {
-            Text(
-                "Наши филиалы",
-                modifier = Modifier.padding(top = 50.dp, start = 10.dp),
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFFfefae0)
-            )
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ){
-                Button(
-                    onClick = { navHost.navigate("UserProfile") },
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .align(Alignment.CenterEnd),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
-
-                    ) {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_person_24),
-                        contentDescription = "",
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ){
+            LazyColumn {
+                items(
+                    branches,
+                    key = { branch -> branch.id }
+                )
+                {
+                        branch ->
+                    val imageState = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current).data(branch.image)
+                            .size(Size.ORIGINAL).build()
+                    ).state
+                    Box(
                         modifier = Modifier
-                            .background(Color(0xFFd4a373))
-                            .padding(top = 35.dp)
-                    )
-                }
-            }
-
-        }
-        LazyColumn {
-            items(
-                branches,
-                key = { branch -> branch.id }
-            )
-            {
-                    branch ->
-                val imageState = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current).data(branch.image)
-                        .size(Size.ORIGINAL).build()
-                ).state
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, Color(0xFFd4a373))
-                        .padding(5.dp)
-                        .clickable {
-                            navHost.navigate("Pets/${branch.id}")
+                            .fillMaxWidth()
+                            .border(1.dp, Color(0xFFd4a373))
+                            .padding(5.dp)
+                            .clickable {
+                                //navHost.navigate("Pets/${branch.id}")
+                            }
+                    ){
+                        if (imageState is AsyncImagePainter.State.Error) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
-                ){
-                    if (imageState is AsyncImagePainter.State.Error) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
+                        if (imageState is AsyncImagePainter.State.Success) {
+                            Image(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp),
+                                painter = imageState.painter,
+                                contentDescription = "",
+                                contentScale = ContentScale.Crop,
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                                    .background(Color.Black.copy(alpha = 0.5f)),
+                            )
                         }
-                    }
-                    if (imageState is AsyncImagePainter.State.Success) {
-                        Image(
+                        Text(
+                            branch.address,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            painter = imageState.painter,
+                                .padding(8.dp)
+                                .align(Alignment.BottomStart),
+                            color = Color(0xFFfefae0),
+                            fontSize = 20.sp
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
                             contentDescription = "",
-                            contentScale = ContentScale.Crop,
-                        )
-                        Box(
+                            tint = Color(0xFFfefae0),
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .background(Color.Black.copy(alpha = 0.5f)),
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 8.dp, end = 20.dp)
                         )
                     }
-                    Text(
-                        branch.address,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .align(Alignment.BottomStart),
-                        color = Color(0xFFfefae0),
-                        fontSize = 20.sp
-                    )
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(bottom = 8.dp, end = 20.dp)
-                    )
                 }
             }
+
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(Color(0xFFd4a373))
+            ) {
+                Box(
+                    modifier = Modifier.weight(0.5f).padding(start = 20.dp, end = 10.dp)
+                ){
+                    Button(
+                        onClick = { navHost.navigate("Introduction") },
+                        modifier = Modifier
+                            .width(70.dp),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_auto_awesome_24),
+                            contentDescription = "",
+                            tint = Color(0xFFfefae0),
+                        )
+                    }
+                    Button(
+                        onClick = { navHost.navigate("BranchesList") },
+                        modifier = Modifier
+                            .width(70.dp)
+                            .align(Alignment.CenterEnd)
+                            .background(Color(0xFFfefae0)),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFfefae0)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_yard_24),
+                            contentDescription = "",
+                            tint = Color(0xFFd4a373),
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier.weight(0.5f).padding(end = 20.dp, start = 10.dp)
+                ){
+                    Button(
+                        onClick = { navHost.navigate("Pets") },
+                        modifier = Modifier
+                            .width(70.dp),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_keyboard_double_arrow_right_24),
+                            contentDescription = "",
+                            tint = Color(0xFFfefae0),
+                        )
+                    }
+                    Button(
+                        onClick = { navHost.navigate("UserProfileMain") },
+                        modifier = Modifier
+                            .width(70.dp)
+                            .align(Alignment.CenterEnd),
+                        colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
+
+                        ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_person_24),
+                            contentDescription = "",
+                            tint = Color(0xFFfefae0),
+                        )
+                    }
+                }
+            }
+
         }
     }
 }

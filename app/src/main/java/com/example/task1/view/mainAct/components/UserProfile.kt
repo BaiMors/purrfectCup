@@ -1,5 +1,6 @@
 package com.example.task1.view.mainAct.components
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,6 +31,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -66,6 +69,8 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
     var email by remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val sh = 17
+    val upsertResult by viewModel.regResult.collectAsState()
+    val ctx = LocalContext.current
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -218,6 +223,21 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
             )
         }
 
+        // Обработка результата авторизации
+        when (upsertResult) {
+            is MainViewModel.Result.Success -> {
+                // Если авторизация успешна, навигация на другой экран
+                navHost.navigate("UserProfileMain")
+            }
+            is MainViewModel.Result.Error -> {
+                // Если произошла ошибка, показываем сообщение об ошибке
+                Toast.makeText(ctx, "Error: ${(upsertResult as MainViewModel.Result.Error).message}", Toast.LENGTH_SHORT).show()
+            }
+            null -> {
+                // Ожидание результата, ничего не делаем
+            }
+        }
+
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -226,9 +246,8 @@ fun UserProfile(navHost: NavHostController, viewModel: MainViewModel) {
             colors = ButtonDefaults.buttonColors(Color(0xFFd4a373)),
             shape = RoundedCornerShape(sh.dp),
             onClick = {
-                if (ids.isNotEmpty()) viewModel.updateUserProfile(name.value, surname.value, email, password.value)
-                else viewModel.addUserProfile(name.value, surname.value)
-                //viewModel.onPasswordChange(password.value)
+                viewModel.updateUserProfile(name.value, surname.value, email, password.value)
+
             }){
             Text("Сохранить изменения", fontSize = 17.sp)
         }
